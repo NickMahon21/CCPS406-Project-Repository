@@ -43,7 +43,7 @@ st.markdown("""
 st.sidebar.title("📊 BizPoints Admin")
 page = st.sidebar.radio(
     "Navigation",
-    ["Dashboard Overview", "User Management", "Reward Management", "Support Tickets"]
+    ["Dashboard Overview", "User Management", "Rewards Management", "Support Tickets"]
 )
 
 # -----------------------------------------------------------
