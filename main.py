@@ -1,8 +1,8 @@
 import streamlit as st
 
 from user_management import assign_role, get_user_profile
-from rewards_management import approve_redemption
-from support_feedback import assign_ticket, update_ticket_status
+from rewards_management import approve_redemption, adjust_points
+from support_feedback import assign_ticket, update_ticket_status, resolve_feedback, get_all_feedback, respond_to_feedback
 from kpi_data import get_kpi_summary
 
 # -----------------------------------------------------------
@@ -109,13 +109,10 @@ elif page == "Rewards":
     # POINT ADJUSTMENT SECTION
     # ------------------------------
     with st.subheader("➕➖ Point Adjustments"):
-        from rewards_management import adjust_points
-
         account_adj = st.number_input("Account ID (Adjustment)", value=1001)
         user_adj = st.number_input("Admin User ID", value=1)
         amount_adj = st.number_input("Adjustment Amount (+ or -)", value=0)
         reason_adj = st.text_input("Adjustment Reason", value="Manual adjustment")
-
         if st.button("Submit Adjustment"):
             st.json(adjust_points(account_adj, user_adj, amount_adj, reason_adj))
 
@@ -152,7 +149,6 @@ elif page == "Support Tickets":
 
     # Display all feedback
     with st.expander("📄 View All Feedback"):
-        from support_feedback import get_all_feedback
         feedback_list = get_all_feedback()
 
         for fb in feedback_list:
@@ -165,7 +161,6 @@ elif page == "Support Tickets":
 
     # Respond to feedback
     with st.expander("✉️ Respond to Feedback"):
-        from support_feedback import respond_to_feedback
         fb_id = st.number_input("Feedback ID", value=301)
         response_text = st.text_area("Response Message")
         if st.button("Submit Response"):
@@ -173,7 +168,6 @@ elif page == "Support Tickets":
 
     # Mark feedback as resolved
     with st.expander("✔️ Mark Feedback as Resolved"):
-        from support_feedback import resolve_feedback
         fb_id_res = st.number_input("Feedback ID to Resolve", value=302)
         if st.button("Mark Resolved"):
             st.json(resolve_feedback(fb_id_res))
