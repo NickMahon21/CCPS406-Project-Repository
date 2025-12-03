@@ -3,7 +3,7 @@ import streamlit as st
 from user_management import assign_role, get_user_profile
 from rewards_management import approve_redemption
 from support_feedback import assign_ticket, update_ticket_status
-from kpi import get_kpi_summary
+from kpi_data import get_kpi_summary
 
 st.set_page_config(page_title="BizPoints Admin Dashboard")
 
