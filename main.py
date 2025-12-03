@@ -43,7 +43,7 @@ st.markdown("""
 st.sidebar.title("📊 BizPoints Admin")
 page = st.sidebar.radio(
     "Navigation",
-    ["Dashboard Overview", "User Management", "Rewards Management", "Support Tickets"]
+    ["Dashboard Overview", "User Management", "Rewards Management", "Support Tickets & Feedback"]
 )
 
 # -----------------------------------------------------------
@@ -120,7 +120,7 @@ elif page == "Rewards Management":
 # -----------------------------------------------------------
 # SUPPORT AND  FEEDBACK                
 # -----------------------------------------------------------
-elif page == "Support Tickets":
+elif page == "Support Tickets & Feedback":
     st.markdown('<div class="section-header">Support & Feedback Management</div>', unsafe_allow_html=True)
 
     # ------------------------------------------
