@@ -105,16 +105,20 @@ elif page == "Rewards":
         if st.button("Approve Redemption"):
             st.json(approve_redemption(account, reward, user))
 
+    st.markdown("---")
+
     # ------------------------------
     # POINT ADJUSTMENT SECTION
     # ------------------------------
-    with st.subheader("➕➖ Point Adjustments"):
+    st.subheader("➕➖ Point Adjustments")
+
+    with st.expander("Make a Point Adjustment"):
         from rewards_management import adjust_points
 
-        account_adj = st.number_input("Account ID", value=1001)
-        user_adj = st.number_input("User ID (Admin Performing Adjustment)", value=1)
-        amount_adj = st.number_input("Adjustment Amount (positive or negative)", value=0)
-        reason_adj = st.text_input("Reason for Adjustment", value="Manual adjustment")
+        account_adj = st.number_input("Account ID (Adjustment)", value=1001)
+        user_adj = st.number_input("Admin User ID", value=1)
+        amount_adj = st.number_input("Adjustment Amount (+ or -)", value=0)
+        reason_adj = st.text_input("Adjustment Reason", value="Manual adjustment")
 
         if st.button("Submit Adjustment"):
             st.json(adjust_points(account_adj, user_adj, amount_adj, reason_adj))
