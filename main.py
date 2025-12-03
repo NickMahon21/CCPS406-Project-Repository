@@ -92,7 +92,7 @@ elif page == "User Management":
 # -----------------------------------------------------------
 # REWARDS PAGE
 # -----------------------------------------------------------
-elif page == "Rewards":
+elif page == "Rewards Management":
     st.markdown('<div class="section-header">Rewards & Redemption Management</div>', unsafe_allow_html=True)
 
     # ------------------------------
