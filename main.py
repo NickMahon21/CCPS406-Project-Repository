@@ -103,10 +103,15 @@ elif page == "Rewards":
             st.json(approve_redemption(account, reward, user))
 
 # -----------------------------------------------------------
-# SUPPORT PAGE
+# SUPPORT AND  FEEDBACK                
 # -----------------------------------------------------------
 elif page == "Support Tickets":
-    st.markdown('<div class="section-header">Support Ticket Management</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Support & Feedback Management</div>', unsafe_allow_html=True)
+
+    # ------------------------------------------
+    # SUPPORT TICKETS
+    # ------------------------------------------
+    st.subheader("🎫 Support Ticket Actions")
 
     with st.expander("📌 Assign Ticket to Agent"):
         ticket = st.number_input("Ticket ID", value=501)
@@ -119,3 +124,38 @@ elif page == "Support Tickets":
         status = st.text_input("New Status", value="closed")
         if st.button("Update Status"):
             st.json(update_ticket_status(ticket2, status))
+
+    st.markdown("---")
+
+    # ------------------------------------------
+    # FEEDBACK HANDLING SECTION
+    # ------------------------------------------
+    st.subheader("📝 Client Feedback")
+
+    # Display all feedback
+    with st.expander("📄 View All Feedback"):
+        from support_feedback import get_all_feedback
+        feedback_list = get_all_feedback()
+
+        for fb in feedback_list:
+            st.write(f"**Feedback ID:** {fb['feedback_id']}")
+            st.write(f"**Client ID:** {fb['client_id']}")
+            st.write(f"**Text:** {fb['text']}")
+            st.write(f"**Status:** {fb['status']}")
+            st.write(f"**Response:** {fb['response']}")
+            st.markdown("---")
+
+    # Respond to feedback
+    with st.expander("✉️ Respond to Feedback"):
+        from support_feedback import respond_to_feedback
+        fb_id = st.number_input("Feedback ID", value=301)
+        response_text = st.text_area("Response Message")
+        if st.button("Submit Response"):
+            st.json(respond_to_feedback(fb_id, response_text))
+
+    # Mark feedback as resolved
+    with st.expander("✔️ Mark Feedback as Resolved"):
+        from support_feedback import resolve_feedback
+        fb_id_res = st.number_input("Feedback ID to Resolve", value=302)
+        if st.button("Mark Resolved"):
+            st.json(resolve_feedback(fb_id_res))
