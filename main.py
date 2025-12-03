@@ -43,7 +43,7 @@ st.markdown("""
 st.sidebar.title("📊 BizPoints Admin")
 page = st.sidebar.radio(
     "Navigation",
-    ["Dashboard Overview", "User Management", "Rewards", "Support Tickets"]
+    ["Dashboard Overview", "User Management", "Reward Management", "Support Tickets"]
 )
 
 # -----------------------------------------------------------
@@ -108,7 +108,7 @@ elif page == "Rewards":
     # ------------------------------
     # POINT ADJUSTMENT SECTION
     # ------------------------------
-    with st.subheader("➕➖ Point Adjustments"):
+    with st.expander("➕➖ Point Adjustments"):
         account_adj = st.number_input("Account ID (Adjustment)", value=1001)
         user_adj = st.number_input("Admin User ID", value=1)
         amount_adj = st.number_input("Adjustment Amount (+ or -)", value=0)
