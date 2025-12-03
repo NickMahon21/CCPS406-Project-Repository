@@ -108,9 +108,7 @@ elif page == "Rewards":
     # ------------------------------
     # POINT ADJUSTMENT SECTION
     # ------------------------------
-    st.subheader("➕➖ Point Adjustments")
-
-    with st.expander("Make a Point Adjustment"):
+    with st.subheader("➕➖ Point Adjustments"):
         from rewards_management import adjust_points
 
         account_adj = st.number_input("Account ID", value=1001)
