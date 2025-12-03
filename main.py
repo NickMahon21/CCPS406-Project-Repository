@@ -95,12 +95,32 @@ elif page == "User Management":
 elif page == "Rewards":
     st.markdown('<div class="section-header">Rewards & Redemption Management</div>', unsafe_allow_html=True)
 
+    # ------------------------------
+    # POINT REDEMPTION SECTION
+    # ------------------------------
     with st.expander("🎁 Approve Redemption Request"):
         account = st.number_input("Account ID", value=1001)
         reward = st.number_input("Reward ID", value=20)
         user = st.number_input("User Redeeming (User ID)", value=1)
         if st.button("Approve Redemption"):
             st.json(approve_redemption(account, reward, user))
+
+    # ------------------------------
+    # POINT ADJUSTMENT SECTION
+    # ------------------------------
+    st.subheader("➕➖ Point Adjustments")
+
+    with st.expander("Make a Point Adjustment"):
+        from rewards_management import adjust_points
+
+        account_adj = st.number_input("Account ID", value=1001)
+        user_adj = st.number_input("User ID (Admin Performing Adjustment)", value=1)
+        amount_adj = st.number_input("Adjustment Amount (positive or negative)", value=0)
+        reason_adj = st.text_input("Reason for Adjustment", value="Manual adjustment")
+
+        if st.button("Submit Adjustment"):
+            st.json(adjust_points(account_adj, user_adj, amount_adj, reason_adj))
+
 
 # -----------------------------------------------------------
 # SUPPORT AND  FEEDBACK                
