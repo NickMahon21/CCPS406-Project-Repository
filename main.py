@@ -118,6 +118,58 @@ elif page == "Rewards Management":
         if st.button("Submit Adjustment"):
             st.json(adjust_points(account_adj, user_adj, amount_adj, reason_adj))
 
+    # ------------------------------
+    # REWARDS CATALOGUE MANAGEMENT
+    # ------------------------------
+    st.subheader("📘 Rewards Catalogue Management")
+
+    # Initialize session state for catalogue
+    if "rewards_catalogue" not in st.session_state:
+        st.session_state.rewards_catalogue = {
+            1: {"name": "Free Coffee", "cost": 80},
+            2: {"name": "Gift Card $10", "cost": 250},
+            3: {"name": "Company Mug", "cost": 150}
+        }
+
+    # Display catalogue
+    with st.expander("📦 View Rewards Catalogue"):
+        for reward_id, info in st.session_state.rewards_catalogue.items():
+            st.write(f"**ID:** {reward_id} | **Reward:** {info['name']} | **Cost:** {info['cost']} points")
+
+    # Add new reward
+    with st.expander("➕ Add Reward"):
+        new_name = st.text_input("Reward Name")
+        new_cost = st.number_input("Reward Cost (points)", min_value=1)
+
+        if st.button("Add Reward"):
+            new_id = max(st.session_state.rewards_catalogue.keys()) + 1
+            st.session_state.rewards_catalogue[new_id] = {"name": new_name, "cost": new_cost}
+            st.success("Reward added successfully.")
+
+    # Update or delete rewards
+    with st.expander("✏️ Update / Delete Reward"):
+        reward_ids = list(st.session_state.rewards_catalogue.keys())
+        selected_reward = st.selectbox("Select Reward ID", reward_ids)
+
+        updated_name = st.text_input(
+            "Updated Name", 
+            value=st.session_state.rewards_catalogue[selected_reward]["name"]
+        )
+        updated_cost = st.number_input(
+            "Updated Cost", 
+            value=st.session_state.rewards_catalogue[selected_reward]["cost"]
+        )
+
+        if st.button("Update Reward"):
+            st.session_state.rewards_catalogue[selected_reward]["name"] = updated_name
+            st.session_state.rewards_catalogue[selected_reward]["cost"] = updated_cost
+            st.success("Reward updated successfully.")
+
+        if st.button("Delete Reward"):
+            del st.session_state.rewards_catalogue[selected_reward]
+            st.success("Reward deleted successfully.")
+
+
 
 # -----------------------------------------------------------
 # SUPPORT AND  FEEDBACK                
@@ -180,6 +232,44 @@ elif page == "Support Tickets & Feedback":
 elif page == "Content Management":
     st.markdown('<div class="section-header">Training & Event Calendar</div>', unsafe_allow_html=True)
 
+    st.subheader("📚 Training Material Management")
+
+    # Initialize training storage
+    if "training_materials" not in st.session_state:
+        st.session_state.training_materials = {}
+
+    # Upload section
+    with st.expander("📤 Upload Training Material"):
+        uploaded_file = st.file_uploader("Upload PDF, DOCX, or PPTX", type=["pdf", "docx", "pptx"])
+
+        material_name = st.text_input("Material Title")
+
+        if st.button("Upload Material"):
+            if uploaded_file and material_name:
+                st.session_state.training_materials[material_name] = uploaded_file.getvalue()
+                st.success("Material uploaded successfully!")
+            else:
+                st.error("Please provide a title and upload a file.")
+
+    # View & manage materials
+    with st.expander("📁 View / Manage Uploaded Materials"):
+        if st.session_state.training_materials:
+            selected_material = st.selectbox("Select Material", list(st.session_state.training_materials.keys()))
+
+            if st.button("Download Material"):
+                st.download_button(
+                    label="Download File",
+                    data=st.session_state.training_materials[selected_material],
+                    file_name=selected_material,
+                )
+
+            if st.button("Delete Material"):
+                del st.session_state.training_materials[selected_material]
+                st.success("Material deleted successfully.")
+        else:
+            st.info("No training materials uploaded yet.")
+
+    
     # Initialize session state for calendar events
     if "calendar_events" not in st.session_state:
         st.session_state.calendar_events = []
