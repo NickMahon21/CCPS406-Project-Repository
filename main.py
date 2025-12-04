@@ -15,7 +15,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for cleaner UI
+# CSS for cleaner UI
 st.markdown("""
 <style>
     .main-title {
@@ -100,6 +100,8 @@ elif page == "Rewards Management":
     # ------------------------------
     # POINT REDEMPTION SECTION
     # ------------------------------
+    st.subheader("💰 Reward Adjustments & Redemptions")
+
     with st.expander("🎁 Approve Redemption Request"):
         account = st.number_input("Account ID", value=1001)
         reward = st.number_input("Reward ID", value=20)
