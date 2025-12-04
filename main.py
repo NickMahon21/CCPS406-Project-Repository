@@ -196,8 +196,6 @@ elif page == "Support Tickets & Feedback":
         if st.button("Update Status"):
             st.json(update_ticket_status(ticket2, status))
 
-    st.markdown("---")
-
     # ------------------------------------------
     # FEEDBACK HANDLING SECTION
     # ------------------------------------------
