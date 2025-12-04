@@ -1,5 +1,6 @@
 import random
 
+# Creating pseudo data in place of the live KPI connections to the subsystems
 class MockResponse:
     def __init__(self, status, data=None, error=None):
         self.status = status
