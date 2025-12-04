@@ -1,5 +1,6 @@
 from api_mock import API_GATEWAY
 
+#Temporary data assignment while API calls are not functional
 def approve_redemption(account_id, reward_id, user_id):
     balance_res = API_GATEWAY.GET(f"/loyalty/balance/{account_id}")
     if balance_res.status != 200:
