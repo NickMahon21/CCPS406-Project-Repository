@@ -74,6 +74,60 @@ if page == "Dashboard Overview":
     st.markdown("### Recent Activity")
     st.write("Activity logs or info panels can be added here later.")
 
+    # ------------------------------
+    # CLIENT LOOKUP SECTION
+    # ------------------------------
+    st.markdown("---")
+    st.subheader("🔍 Client Lookup")
+
+    client_id_lookup = st.number_input("Enter Client ID", min_value=1, value=1001)
+
+    if st.button("Lookup Client"):
+        st.write(f"### Results for Client {client_id_lookup}")
+
+        # --- POINT BALANCE ---
+        from api_mock import API_GATEWAY
+        balance_res = API_GATEWAY.GET(f"/loyalty/balance/{client_id_lookup}")
+
+        if balance_res.status == 200:
+            st.metric("Current Point Balance", balance_res.data["balance"])
+        else:
+            st.warning("No balance found for this client.")
+
+        # --- SUPPORT REQUESTS (Tickets) ---
+        st.write("### Support Requests")
+        try:
+            tickets = [
+                t for t in API_GATEWAY.support_tickets.values()
+                if t.get("user_id") == client_id_lookup
+            ]
+        except:
+            tickets = []
+
+        if tickets:
+            for t in tickets:
+                st.write(f"**Ticket ID:** {t['ticket_id']} — *{t['status']}*")
+        else:
+            st.info("No support requests found.")
+
+        # --- EVENTS REGISTERED FOR ---
+        st.write("### Events / Trainings Registered")
+
+        if "calendar_events" in st.session_state:
+            client_events = [
+                e for e in st.session_state.calendar_events
+                if str(client_id_lookup) in e.get("title", "")
+            ]
+        else:
+            client_events = []
+
+        if client_events:
+            for e in client_events:
+                st.write(f"- **{e['title']}** ({e['start']})")
+        else:
+            st.info("No events or trainings registered.")
+
+
 # -----------------------------------------------------------
 # USER MANAGEMENT PAGE
 # -----------------------------------------------------------
