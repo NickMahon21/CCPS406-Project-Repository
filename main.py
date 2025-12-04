@@ -1,4 +1,6 @@
 import streamlit as st
+from streamlit_calendar import calendar
+from datetime import datetime, timedelta
 
 from user_management import assign_role, get_user_profile
 from rewards_management import approve_redemption, adjust_points
@@ -43,7 +45,7 @@ st.markdown("""
 st.sidebar.title("📊 BizPoints Admin")
 page = st.sidebar.radio(
     "Navigation",
-    ["Dashboard Overview", "User Management", "Rewards Management", "Support Tickets & Feedback"]
+    ["Dashboard Overview", "User Management", "Rewards Management", "Support Tickets & Feedback", "Content Management"]
 )
 
 # -----------------------------------------------------------
@@ -171,3 +173,19 @@ elif page == "Support Tickets & Feedback":
         fb_id_res = st.number_input("Feedback ID to Resolve", value=302)
         if st.button("Mark Resolved"):
             st.json(resolve_feedback(fb_id_res))
+
+# -----------------------------------------------------------
+# CONTENT MANAGEMENT                   
+# -----------------------------------------------------------
+elif page == "Content Management":
+    st.markdown('<div class="section-header">Content Management</div>', unsafe_allow_html=True)
+
+    # ------------------------------------------
+    # EVENT MANAGEMENT SECTION
+    # ------------------------------------------
+    st.subheader("Content Management")
+
+    # Display all upcoming trainings
+    with st.expander("📅 Upcoming Traingings"):
+
+        # Define the calendar options for a weekly view
