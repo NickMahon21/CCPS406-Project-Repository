@@ -1,5 +1,6 @@
 from api_mock import API_GATEWAY
 
+#Pseudo data assignment in place of connection to sub-systems
 def assign_role(user_id, role_id):
     payload = {"user_id": user_id, "role_id": role_id}
     response = API_GATEWAY.POST("/user-management/assign-role", payload)
