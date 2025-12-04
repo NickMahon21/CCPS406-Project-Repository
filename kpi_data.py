@@ -1,5 +1,6 @@
 from api_mock import API_GATEWAY
 
+#Mock statistics to represent what could be with live data
 def get_kpi_summary():
     tickets = API_GATEWAY.tickets
     rewards = API_GATEWAY.rewards
