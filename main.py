@@ -174,18 +174,3 @@ elif page == "Support Tickets & Feedback":
         if st.button("Mark Resolved"):
             st.json(resolve_feedback(fb_id_res))
 
-# -----------------------------------------------------------
-# CONTENT MANAGEMENT                   
-# -----------------------------------------------------------
-elif page == "Content Management":
-    st.markdown('<div class="section-header">Content Management</div>', unsafe_allow_html=True)
-
-    # ------------------------------------------
-    # EVENT MANAGEMENT SECTION
-    # ------------------------------------------
-    st.subheader("Content Management")
-
-    # Display all upcoming trainings
-    with st.expander("📅 Upcoming Traingings"):
-
-        # Define the calendar options for a weekly view
