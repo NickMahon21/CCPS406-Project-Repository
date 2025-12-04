@@ -180,10 +180,58 @@ elif page == "Support Tickets & Feedback":
 elif page == "Content Management":
     st.markdown('<div class="section-header">Training & Event Calendar</div>', unsafe_allow_html=True)
 
-    # Defining calendar options for a weekly view
+    # Initialize session state for calendar events
+    if "calendar_events" not in st.session_state:
+        st.session_state.calendar_events = []
+
+    # ------------------------------
+    # ADD NEW EVENT / TRAINING
+    # ------------------------------
+    st.subheader("➕ Add Event / Training")
+
+    title = st.text_input("Title")
+    event_type = st.selectbox("Type", ["Event", "Training"])
+    date = st.date_input("Date")
+    start_time = st.time_input("Start Time")
+    end_time = st.time_input("End Time")
+
+    if st.button("Add Entry"):
+        start_dt = datetime.combine(date, start_time)
+        end_dt = datetime.combine(date, end_time)
+
+        color = "#FF4B4B" if event_type == "Event" else "#9B59B6"  # red or purple
+
+        st.session_state.calendar_events.append({
+            "title": f"{event_type}: {title}",
+            "start": start_dt.isoformat(),
+            "end": end_dt.isoformat(),
+            "color": color,
+        })
+        st.success(f"{event_type} added successfully!")
+
+    # ------------------------------
+    # DELETE EVENT / TRAINING
+    # ------------------------------
+    st.subheader("🗑 Delete Entry")
+
+    if st.session_state.calendar_events:
+        event_titles = [e["title"] for e in st.session_state.calendar_events]
+        delete_choice = st.selectbox("Select Entry to Delete", event_titles)
+
+        if st.button("Delete Entry"):
+            st.session_state.calendar_events = [
+                e for e in st.session_state.calendar_events if e["title"] != delete_choice
+            ]
+            st.success("Entry deleted successfully!")
+    else:
+        st.info("No events or trainings available to delete.")
+
+    # ------------------------------
+    # RENDER CALENDAR
+    # ------------------------------
     calendar_options = {
         "initialView": "timeGridWeek",
-        "editable": True,
+        "editable": False,
         "selectable": True,
         "headerToolbar": {
             "left": "prev,next today",
@@ -194,23 +242,10 @@ elif page == "Content Management":
         "slotMaxTime": "20:00:00",
     }
 
-    # Calculate event time
-    today = datetime.now()
-    start_of_week = today - timedelta(days=today.weekday())
-    event_start = start_of_week + timedelta(days=2, hours=10)
-    event_end = event_start + timedelta(hours=2)
+    # Convert Python list → JS array
+    import json
+    events_json = json.dumps(st.session_state.calendar_events)
 
-    # Define calendar events
-    calendar_events = [
-        {
-            "title": "Important Meeting",
-            "start": event_start.isoformat(),
-            "end": event_end.isoformat(),
-            "color": "#FF4B4B",
-        }
-    ]
-
-    # Render FullCalendar inside Streamlit
     calendar_html = f"""
     <div id='calendar'></div>
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css'>
@@ -230,7 +265,7 @@ elif page == "Content Management":
                 }},
                 slotMinTime: '{calendar_options["slotMinTime"]}',
                 slotMaxTime: '{calendar_options["slotMaxTime"]}',
-                events: {calendar_events},
+                events: {events_json}
             }});
             calendar.render();
         }});
