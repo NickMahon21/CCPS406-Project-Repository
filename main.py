@@ -1,11 +1,11 @@
 import streamlit as st
-#from streamlit_calendar import calendar
-#from datetime import datetime, timedelta
+import streamlit.components.v1 as components
 
 from user_management import assign_role, get_user_profile
 from rewards_management import approve_redemption, adjust_points
 from support_feedback import assign_ticket, update_ticket_status, resolve_feedback, get_all_feedback, respond_to_feedback
 from kpi_data import get_kpi_summary
+from datetime import datetime, timedelta
 
 # -----------------------------------------------------------
 # PAGE CONFIG & CSS STYLES
@@ -174,3 +174,67 @@ elif page == "Support Tickets & Feedback":
         if st.button("Mark Resolved"):
             st.json(resolve_feedback(fb_id_res))
 
+# -----------------------------------------------------------
+# CONTENT MANAGEMENT — EVENTS & TRAINING CALENDAR
+# -----------------------------------------------------------
+elif page == "Content Management":
+    st.markdown('<div class="section-header">Training & Event Calendar</div>', unsafe_allow_html=True)
+
+    # Defining calendar options for a weekly view
+    calendar_options = {
+        "initialView": "timeGridWeek",
+        "editable": True,
+        "selectable": True,
+        "headerToolbar": {
+            "left": "prev,next today",
+            "center": "title",
+            "right": "timeGridWeek,timeGridDay",
+        },
+        "slotMinTime": "08:00:00",
+        "slotMaxTime": "20:00:00",
+    }
+
+    # Calculate event time
+    today = datetime.now()
+    start_of_week = today - timedelta(days=today.weekday())
+    event_start = start_of_week + timedelta(days=2, hours=10)
+    event_end = event_start + timedelta(hours=2)
+
+    # Define calendar events
+    calendar_events = [
+        {
+            "title": "Important Meeting",
+            "start": event_start.isoformat(),
+            "end": event_end.isoformat(),
+            "color": "#FF4B4B",
+        }
+    ]
+
+    # Render FullCalendar inside Streamlit
+    calendar_html = f"""
+    <div id='calendar'></div>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css'>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {{
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {{
+                initialView: '{calendar_options["initialView"]}',
+                editable: {str(calendar_options["editable"]).lower()},
+                selectable: {str(calendar_options["selectable"]).lower()},
+                headerToolbar: {{
+                    left: '{calendar_options["headerToolbar"]["left"]}',
+                    center: '{calendar_options["headerToolbar"]["center"]}',
+                    right: '{calendar_options["headerToolbar"]["right"]}',
+                }},
+                slotMinTime: '{calendar_options["slotMinTime"]}',
+                slotMaxTime: '{calendar_options["slotMaxTime"]}',
+                events: {calendar_events},
+            }});
+            calendar.render();
+        }});
+    </script>
+    """
+
+    components.html(calendar_html, height=700, scrolling=True)
