@@ -1,6 +1,6 @@
 from api_mock import API_GATEWAY
 
-# Sample feedback list while KPIs are not functional
+# Sample feedback list while APIs are not functional
 feedback_store = {
     301: {"feedback_id": 301, "client_id": 1001, "text": "Points did not update", "status": "open", "response": None},
     302: {"feedback_id": 302, "client_id": 1002, "text": "Reward not delivered", "status": "open", "response": None},
